@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>FARRUKO — Cvrbon Vrmor · LA167</title>
+  <meta name="description" content="The official world of Farruko — El Talento del Bloque. New music, discography, story and the Cvrbon Vrmor era." />
+  <meta name="theme-color" content="#08080a" />
+  <meta property="og:title" content="FARRUKO — Cvrbon Vrmor" />
+  <meta property="og:description" content="Que Novedad Remix ya disponible. Que Talento, Madrid, Yapaque and 15 years of hits." />
+  <meta property="og:image" content="/img/artist.jpg" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 4 C68 12 84 10 96 16 C96 58 78 82 50 96 C22 82 4 58 4 16 C16 10 32 12 50 4Z' fill='%23111'/><text x='50' y='64' font-size='36' text-anchor='middle' fill='%23ff5b1a' font-family='Impact'>167</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- ============ PRELOADER: fuel gauge to 167 ============ -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__hud">
+      <span class="mono">SYS/ CVRBON VRMOR</span>
+      <span class="mono">PR · 18.39°N 66.15°W</span>
+    </div>
+    <div class="loader__count"><span class="loader__num">000</span><span class="loader__unit mono">FUEL</span></div>
+    <div class="loader__bar"><i></i></div>
+    <div class="loader__word">
+      <span>I</span><span>G</span><span>N</span><span>I</span><span>C</span><span>I</span><span>Ó</span><span>N</span>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+  <div class="gauge" aria-hidden="true"><i></i><span class="mono">RPM</span></div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a href="#top" class="nav__logo" aria-label="Farruko — home">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4 C68 12 84 10 96 16 C96 58 78 82 50 96 C22 82 4 58 4 16 C16 10 32 12 50 4Z"/></svg>
+      <span>FARRUKO</span>
+    </a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#nuevo">Nuevo</a>
+      <a href="#hits">Hits</a>
+      <a href="#discografia">Discografía</a>
+      <a href="#historia">Historia</a>
+      <a href="#feed">Feed</a>
+    </nav>
+    <a class="btn btn--fuel magnetic" href="https://lnksfs.com/quenovedadrmx" target="_blank" rel="noopener" data-cursor="Pre-save">
+      <span>Pre-save</span><b>Que Novedad RMX</b>
+    </a>
+    <button class="nav__burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+  </header>
+  <div class="menu" aria-hidden="true">
+    <a href="#nuevo">Nuevo</a><a href="#hits">Hits</a><a href="#discografia">Discografía</a><a href="#historia">Historia</a><a href="#feed">Feed</a>
+  </div>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <canvas class="hero__canvas" aria-hidden="true"></canvas>
+      <div class="hero__hud hero__hud--tl mono"><span class="dot"></span> LIVE · LA167 ⛽ 🛡️ 🏁</div>
+      <div class="hero__hud hero__hud--tr mono">BAYAMÓN<br/>PUERTO RICO</div>
+      <h1 class="hero__title" aria-label="Farruko">
+        <span class="hero__row"><span class="split">FARRU</span></span>
+        <span class="hero__row hero__row--right"><span class="split outline">KO</span></span>
+      </h1>
+      <div class="hero__meta">
+        <p class="hero__kicker mono">El Talento del Bloque — Est. 2007</p>
+        <p class="hero__lede">Reggaetón, trap, guaracha, EDM. Fifteen years of hits, one armour. <strong>Esta es la era Cvrbon Vrmor.</strong></p>
+        <div class="hero__ctas">
+          <a class="btn btn--fuel magnetic" href="#nuevo" data-cursor="Go"><span>Escucha</span><b>Lo nuevo</b></a>
+          <button class="btn btn--ghost magnetic js-play" data-spotify="track/1IJaXFFFMdb4s1jn7nSYUc" data-title="Que Talento" data-cover="/img/quetalento.jpg" data-cursor="Play">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg><span>Que Talento</span>
+          </button>
+        </div>
+      </div>
+      <div class="hero__scroll mono"><span>Scroll</span><i></i></div>
+    </section>
+
+    <!-- ============ TICKER ============ -->
+    <div class="ticker" aria-label="Que Novedad Remix ya disponible">
+      <div class="ticker__track">
+        <span>QUE NOVEDAD REMIX</span><em>YA DISPONIBLE</em><span>IVANA × FARRUKO</span><em>🛡️🏁</em>
+        <span>QUE NOVEDAD REMIX</span><em>YA DISPONIBLE</em><span>IVANA × FARRUKO</span><em>🛡️🏁</em>
+      </div>
+    </div>
+
+    <!-- ============ NEW RELEASES ============ -->
+    <section class="section releases" id="nuevo">
+      <div class="section__head">
+        <p class="eyebrow mono">01 — Nuevo</p>
+        <h2 class="display reveal-lines">Lo más<br/><span class="fuel">nuevo</span> de Farru</h2>
+        <p class="section__note">Straight from the link in his bio. Hover the cards, tap to listen.</p>
+      </div>
+      <div class="releases__grid"></div>
+    </section>
+
+    <!-- ============ FEATURE: QUE NOVEDAD ============ -->
+    <section class="feature" id="quenovedad">
+      <div class="feature__bg" aria-hidden="true"></div>
+      <div class="feature__inner">
+        <div class="feature__vinyl">
+          <div class="sleeve"><img src="/img/quenovedad.webp" alt="Que Novedad Remix cover art" loading="lazy" /></div>
+          <div class="disc"><div class="disc__label"><img src="/img/quenovedad.webp" alt="" loading="lazy" /></div></div>
+        </div>
+        <div class="feature__copy">
+          <p class="eyebrow mono">Destacado · Pre-save</p>
+          <h2 class="display reveal-lines">Que<br/>Novedad<br/><span class="chrome">Remix</span></h2>
+          <p class="feature__text">“Esta semana se hace realidad la novedad más linda del año.” Ivana — <em>la nena de carbón</em> — became the first woman to sign with Farruko, and the remix is the proof. Farruko says he’s producing “el rmx más cabrón del año.”</p>
+          <a class="btn btn--fuel btn--xl magnetic" href="https://lnksfs.com/quenovedadrmx" target="_blank" rel="noopener" data-cursor="Pre-save"><span>Pre-save</span><b>en tu plataforma</b></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="section stats" aria-label="By the numbers">
+      <p class="eyebrow mono">02 — Telemetría</p>
+      <div class="stats__grid"></div>
+    </section>
+
+    <!-- ============ HITS ============ -->
+    <section class="section hits" id="hits">
+      <div class="section__head section__head--row">
+        <div>
+          <p class="eyebrow mono">03 — Hits</p>
+          <h2 class="display reveal-lines">Los que<br/><span class="fuel">rompen</span></h2>
+        </div>
+        <p class="section__note">Play counts from Spotify. Click any track to play it in the dock.</p>
+      </div>
+      <ol class="tracks"></ol>
+      <div class="track-float" aria-hidden="true"><img alt="" /></div>
+    </section>
+
+    <!-- ============ DISCOGRAPHY (pinned horizontal coverflow) ============ -->
+    <section class="disco" id="discografia">
+      <div class="disco__pin">
+        <div class="disco__head">
+          <div>
+            <p class="eyebrow mono">04 — Discografía</p>
+            <h2 class="display">15 años.<br/><span class="outline">15 proyectos.</span></h2>
+          </div>
+          <div class="disco__year"><span class="mono">YEAR</span><b>2026</b></div>
+        </div>
+        <div class="disco__track"></div>
+        <div class="disco__progress"><i></i></div>
+      </div>
+    </section>
+
+    <!-- ============ STORY / TIMELINE ============ -->
+    <section class="section story" id="historia">
+      <div class="story__intro">
+        <div class="story__photo tilt">
+          <img src="/img/farruko-2021.jpg" alt="Farruko in 2021, wearing a red cap and tan jacket" loading="lazy" />
+          <span class="story__caption mono">Carlos Efrén Reyes Rosado · b. 02.05.1991</span>
+        </div>
+        <div>
+          <p class="eyebrow mono">05 — Historia</p>
+          <h2 class="display reveal-lines">De Myspace<br/>al <span class="fuel">mundo</span></h2>
+          <p class="story__lede">At 16, a kid from Bayamón started uploading songs to Myspace. Today he’s a top-100 artist on the planet, the founder of his own label, and one of the most featured voices in Latin music history.</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline__line"><i></i></div>
+        <div class="timeline__items"></div>
+      </div>
+    </section>
+
+    <!-- ============ COLLABS ============ -->
+    <section class="collabs" aria-label="Collaborators">
+      <p class="eyebrow mono center">06 — Ha trabajado con</p>
+      <div class="marquee marquee--a"><div class="marquee__inner"></div></div>
+      <div class="marquee marquee--b"><div class="marquee__inner"></div></div>
+    </section>
+
+    <!-- ============ LABEL ============ -->
+    <section class="section label">
+      <div class="label__card tilt">
+        <div class="label__shine" aria-hidden="true"></div>
+        <p class="eyebrow mono">07 — La casa</p>
+        <h2 class="display">Carbon<br/>Fiber<span class="fuel">.</span></h2>
+        <p>In 2014 Farruko and his manager Franklin Martínez founded <strong>Carbon Fiber Music</strong>. In 2026 the house — now <strong>Carbon Armor × Massivo</strong> — made history: <strong>Ivana</strong> became the first woman ever signed, announced exclusively by Billboard.</p>
+        <div class="label__tags mono"><span>EST. 2014</span><span>LA167</span><span>CARBON ARMOR</span><span>MASSIVO</span></div>
+      </div>
+      <div class="label__quote">
+        <blockquote class="display reveal-lines">“Farru is retired<br/>and <span class="fuel">Carlos</span><br/>is here now.”</blockquote>
+        <p class="mono">— Miami, Feb 2022. He returned to the stage in 2023, stronger.</p>
+      </div>
+    </section>
+
+    <!-- ============ FEED ============ -->
+    <section class="section feed" id="feed">
+      <div class="section__head section__head--row">
+        <div>
+          <p class="eyebrow mono">08 — @farruko</p>
+          <h2 class="display reveal-lines">Desde el<br/><span class="fuel">bloque</span></h2>
+        </div>
+        <a class="btn btn--ghost magnetic" href="https://www.instagram.com/farruko/" target="_blank" rel="noopener" data-cursor="Follow"><span>22.5M</span><b>Seguir</b></a>
+      </div>
+      <div class="feed__grid"></div>
+    </section>
+
+    <!-- ============ OUTRO ============ -->
+    <section class="outro">
+      <p class="eyebrow mono center">Ya disponible</p>
+      <a class="outro__big magnetic" href="https://lnksfs.com/quenovedadrmx" target="_blank" rel="noopener" data-cursor="Pre-save">
+        <span>QUE</span><span class="outline">NOVEDAD</span><span class="fuel">RMX</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__brand display">FARRUKO<span class="fuel">.</span></div>
+      <nav class="footer__social" aria-label="Social">
+        <a href="https://www.instagram.com/farruko/" target="_blank" rel="noopener">Instagram ↗</a>
+        <a href="https://open.spotify.com/artist/329e4yvIujISKGKz1BZZbO" target="_blank" rel="noopener">Spotify ↗</a>
+        <a href="https://www.youtube.com/channel/UCqFhfan_P2AmGVB1X2B-3Aw" target="_blank" rel="noopener">YouTube ↗</a>
+        <a href="https://x.com/FarrukoOfficial" target="_blank" rel="noopener">X ↗</a>
+      </nav>
+    </div>
+    <div class="footer__bottom mono">
+      <span>© 2026 La 167 LLC · Cvrbon Vrmor</span>
+      <span>Hecho en Puerto Rico 🇵🇷</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- ============ PLAYER DOCK (real Spotify embeds) ============ -->
+  <aside class="dock" aria-label="Now playing" aria-hidden="true">
+    <div class="dock__meta">
+      <img class="dock__cover" alt="" />
+      <div><span class="mono">Now playing</span><b class="dock__title"></b></div>
+      <div class="dock__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <button class="dock__close" aria-label="Close player">✕</button>
+    </div>
+    <div class="dock__frame"></div>
+  </aside>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
