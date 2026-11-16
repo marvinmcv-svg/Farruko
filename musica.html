@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Música — FARRUKO</title>
+  <meta name="description" content="All 15 Farruko records from El Talento del Bloque (2010) to Resurge (2026), with tracklists and the hits." />
+  <meta name="theme-color" content="#08080a" />
+  <meta property="og:title" content="FARRUKO — Cvrbon Vrmor" />
+  <meta property="og:description" content="Que Novedad Remix ya disponible. Que Talento, Madrid, Yapaque and 15 years of hits." />
+  <meta property="og:image" content="/img/artist.jpg" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 4 C68 12 84 10 96 16 C96 58 78 82 50 96 C22 82 4 58 4 16 C16 10 32 12 50 4Z' fill='%23111'/><text x='50' y='64' font-size='36' text-anchor='middle' fill='%23ff5b1a' font-family='Impact'>167</text></svg>" />
+  <script>if (document.referrer && new URL(document.referrer).origin === location.origin && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('is-entering');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body data-page="musica">
+  <main id="top">
+    <section class="phero phero--musica">
+      <div class="phero__bg" aria-hidden="true"></div>
+      <div class="phero__inner">
+        <div class="phero__copy">
+          <p class="eyebrow mono">Música · 2010 — 2026</p>
+          <h1 class="phero__title display"><span class="line"><span class="line__in">Los</span></span><span class="line"><span class="line__in outline">Records</span></span></h1>
+          <p class="phero__lede">Fifteen projects, from <em>El Talento del Bloque</em> to <em>Resurge</em>. Pull any record out of the crate to see the tracklist and play it.</p>
+          <dl class="phero__stats mono">
+            <div><dt>Proyectos</dt><dd class="display">15</dd></div>
+            <div><dt>Canciones</dt><dd class="display">223</dd></div>
+            <div><dt>Años</dt><dd class="display">16</dd></div>
+          </dl>
+        </div>
+        <button class="turntable js-open-record" data-slug="resurge" data-cursor="Abrir" aria-label="Open Farruko: Resurge">
+          <span class="turntable__plinth" aria-hidden="true"></span>
+          <span class="turntable__vinyl" aria-hidden="true"><span class="turntable__label"><img src="/img/resurge.jpg" alt="" /></span></span>
+          <span class="turntable__arm" aria-hidden="true"></span>
+          <span class="turntable__tag mono">Último · Farruko: Resurge (2026)</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="section crate-wrap" id="records">
+      <div class="crate__bar">
+        <div class="chips" role="tablist" aria-label="Filtrar records"></div>
+        <p class="crate__count mono" aria-live="polite"></p>
+      </div>
+      <div class="crate"></div>
+    </section>
+
+    <section class="section hits" id="hits">
+      <div class="section__head section__head--row">
+        <div>
+          <p class="eyebrow mono">Hits</p>
+          <h2 class="display reveal-lines">Los que<br/><span class="fuel">rompen</span></h2>
+        </div>
+        <p class="section__note fade-up">Play counts from Spotify. Click any track to play it in the dock.</p>
+      </div>
+      <ol class="tracks"></ol>
+      <div class="track-float" aria-hidden="true"><img alt="" /></div>
+    </section>
+
+    <section class="next-page">
+      <a href="/media.html" class="next-page__link" data-cursor="Siguiente">
+        <span class="mono">Siguiente</span>
+        <span class="display">Media →</span>
+      </a>
+    </section>
+  </main>
+  <script type="module" src="/src/pages/musica.js"></script>
+</body>
+</html>
