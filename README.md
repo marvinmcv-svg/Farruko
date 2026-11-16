@@ -10,28 +10,23 @@ npm run dev      # local dev server
 npm run build    # production build → dist/
 ```
 
-## What's inside
+## Pages
 
-| Section | What it does |
+| Page | What's on it |
 | --- | --- |
-| Preloader | A fuel gauge that counts to **167**, then the screen wipes away ("IGNICIÓN"). |
-| Hero | A real-time Three.js carbon-fibre shield with a chrome rim, a glowing 167 emblem, an equalizer ring pulsing at 95 BPM, and floating embers. It follows the mouse and spins as you scroll. |
-| Nuevo | The 4 releases from his Instagram link-in-bio, as 3D tilt cards with a holographic glare. |
-| Que Novedad Remix | A vinyl record slides out of its sleeve as you scroll, with a pre-save button. |
-| Telemetría | Animated stats: 43.4M monthly listeners, 22.6M followers, 1.93B Pepas streams… |
-| Hits | Track list with Spotify play counts. A cover follows the cursor, and clicking a track plays it in a **real Spotify embed dock**. |
-| Discografía | A pinned horizontal coverflow through all 15 albums (2010 → 2026), with a live year counter. |
-| Historia | A timeline from Bayamón 1991 to 2026 whose line draws itself as you scroll. |
-| Collabs | Two marquees of collaborators that speed up and skew with how fast you scroll. |
-| Carbon Fiber / Feed / Outro | The label story, his latest Instagram posts with real engagement numbers, and a final pre-save call to action. |
+| `index.html` — Inicio | **Carretera 167** hero: a real-time Three.js night drive down PR-167 in Bayamón (the road *La 167* is named after). The album covers are lit billboards you drive past, and the HUD names each one ("Pasando · 2021 — La 167"). Click a billboard to open that record. Hold the mouse/finger or **Space** to accelerate to 167 km/h: the FOV widens, traffic stretches into light trails, and a radial blur plus chromatic split kick in. Bloom, an overhead "167 BAYAMÓN" sign and a glowing skyline. Below the hero: new releases, the Que Novedad vinyl feature, stats, the pinned discography coverflow and links into the other pages. |
+| `musica.html` — Música | A turntable header, then a filterable crate of all 15 records (Álbum / EP / Live / Especial). When you hover a sleeve, the vinyl slides out. Clicking one opens a record modal with the Spotify tracklist and prev/next buttons, and each record has a deep link (`/musica.html#la-167`). Also the hits list with play counts. |
+| `media.html` — Media | A featured video in a theater layout, a filterable grid of 16 official videos that play in a lightbox (youtube-nocookie, deep links like `#v-<id>`), the Instagram feed, and a **press kit**: short/long bio with a copy button, key facts, downloadable artwork and the 167 shield logo as SVG. |
+| `historia.html` — Historia | A portrait header, key facts, the scroll-drawn timeline, Carbon Fiber, and the collaborator marquees. |
 
-Also included: smooth scrolling (Lenis), a custom cursor with labels, magnetic buttons, a scroll-progress "RPM" gauge, film grain, a mobile menu and responsive layouts. Motion is reduced for users who have `prefers-reduced-motion` set, and the page still looks intended if WebGL is unavailable.
+Shared across pages (`src/core/layout.js`): nav with the current page marked, a fuel-orange wipe transition between pages, a Spotify dock that every page can use, smooth scrolling, a custom cursor, magnetic buttons and tilt cards. three.js loads only on the home page.
 
 ## Data sources
 
 The content in `src/data.js` was scraped with Firecrawl on 14 Nov 2026 from:
 - Instagram `@farruko`: bio, follower count, recent posts
 - His link-in-bio (`lnksfs.com/quenovedadrmx`)
+- YouTube: official video IDs, view counts and thumbnails (16 Nov 2026), via Firecrawl
 - Spotify: the release pages, artist page and discography
 - Wikipedia, latingrammy.com and Wikidata: biography and official handles
 
