@@ -37,9 +37,10 @@ html.is-entering body::after { content: ''; position: fixed; inset: 0; z-index: 
 .drive__word {
   position: relative; display: inline-block; color: var(--text);
   transform: scaleY(calc(1 + (var(--spd) - 0.5) * 0.25));
-  text-shadow: 0 0 60px rgba(255, 91, 26, calc(var(--spd) * 0.6));
-  background: linear-gradient(180deg, #ffffff 0%, rgba(250, 244, 238, 0.95) 38%, rgba(255, 150, 90, 0.55) 68%, rgba(255, 91, 26, 0.06) 96%);
-  -webkit-text-stroke: 1px rgba(255, 220, 200, 0.28);
+  /* Opaque fill (no fade to transparent) so the skyline's lit windows don't show through
+     the letters; a drop-shadow, not text-shadow, keeps the clipped gradient crisp. */
+  background: linear-gradient(180deg, #ffffff 0%, #fbf4ee 42%, #ffc29c 74%, #ff8a4a 100%);
+  filter: drop-shadow(0 14px 40px rgba(8, 4, 2, 0.55)) drop-shadow(0 0 calc(20px + var(--spd) * 50px) rgba(255, 91, 26, calc(var(--spd) * 0.45)));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .drive__word::before, .drive__word::after {
@@ -48,7 +49,7 @@ html.is-entering body::after { content: ''; position: fixed; inset: 0; z-index: 
 }
 .drive__word::before { color: #ff3b1a; transform: translateX(calc(var(--spd) * -18px)) scaleX(calc(1 + var(--spd) * 0.03)); filter: blur(calc(var(--spd) * 3px)); }
 .drive__word::after { color: #3ad6ff; transform: translateX(calc(var(--spd) * 18px)) scaleX(calc(1 + var(--spd) * 0.03)); filter: blur(calc(var(--spd) * 3px)); }
-.drive__tag { position: absolute; z-index: 3; left: 0; right: 0; top: calc(50% + clamp(30px, 6vw, 110px)); text-align: center; color: #e9e1d8; letter-spacing: 0.4em; pointer-events: none; }
+.drive__tag { position: absolute; z-index: 3; left: 0; right: 0; top: calc(50% + clamp(30px, 6vw, 110px)); text-align: center; color: #f4ede6; letter-spacing: 0.4em; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.9), 0 0 18px rgba(0,0,0,0.8); }
 
 .drive__hud { position: absolute; z-index: 4; color: #cfc8c0; }
 .drive__hud--tl { top: 96px; left: var(--pad); display: flex; flex-direction: column; gap: 6px; }
@@ -59,29 +60,40 @@ html.is-entering body::after { content: ''; position: fixed; inset: 0; z-index: 
 .drive__np:hover, .drive__np.is-playing { border-color: var(--fuel); background: rgba(255, 91, 26, 0.18); }
 .drive__np .mono { color: var(--fuel); }
 
+.cluster { display: flex; align-items: center; gap: clamp(16px, 2vw, 28px); }
 .drive__passing {
-  position: absolute; z-index: 4; right: var(--pad); top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; align-items: flex-end; gap: 6px; text-align: right; pointer-events: none;
+  display: flex; flex-direction: column; gap: 6px; pointer-events: none;
+  padding-left: clamp(16px, 2vw, 28px); border-left: 1px solid rgba(255,255,255,0.16);
 }
-.drive__passing-k { color: var(--fuel); }
-.drive__passing-v { display: block; overflow: hidden; max-width: 260px; }
+.drive__passing-k { color: #ffa36e; text-shadow: 0 1px 2px rgba(0,0,0,0.9); }
+.drive__passing-v b { text-shadow: 0 2px 12px rgba(0,0,0,0.7); }
+.drive__passing-v { display: block; overflow: hidden; max-width: min(300px, 40vw); }
 .drive__passing-v b { display: block; font-family: var(--f-display); font-weight: 700; font-size: 26px; letter-spacing: 0; text-transform: uppercase; color: #fff; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .drive.is-over-board .drive__passing-k::after { content: ' · clic para abrir'; color: #fff; }
 
 .drive__bottom { position: absolute; z-index: 4; left: var(--pad); right: var(--pad); bottom: calc(var(--pad) * 0.8); display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
 .drive__cta { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
 .drive__hint { color: #c9c2ba; }
+.drive__hint--touch { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .drive__hint--fine { display: none; }
+  .drive__hint--touch { display: inline; }
+}
 .drive__hint kbd { font-family: inherit; color: #0a0a0a; background: #f2f1ee; padding: 3px 7px; border-radius: 4px; margin: 0 2px; }
 .drive.is-boost .drive__hint kbd { background: var(--fuel); }
 .drive__btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
 
-.speedo { position: relative; width: clamp(140px, 13vw, 190px); aspect-ratio: 1; }
+.speedo { position: relative; flex: none; width: clamp(140px, 13vw, 190px); aspect-ratio: 1; }
 .speedo__dial { width: 100%; height: 100%; overflow: visible; }
-.speedo__track, .speedo__fill { fill: none; stroke-width: 6; transform: rotate(135deg); transform-origin: 100px 100px; stroke-linecap: round; }
+.speedo__track, .speedo__fill, .speedo__red { fill: none; stroke-width: 6; transform: rotate(135deg); transform-origin: 100px 100px; stroke-linecap: round; }
 .speedo__track { stroke: rgba(255,255,255,0.12); stroke-dasharray: 395.8 527.8; }
 .speedo__fill { stroke: var(--fuel); filter: drop-shadow(0 0 8px var(--fuel)); transition: stroke 0.3s; }
 .drive.is-redline .speedo__fill { stroke: #ff2a12; }
+.speedo__red { stroke: rgba(255, 42, 18, 0.55); stroke-linecap: butt; }
 .speedo__ticks line { stroke: rgba(255,255,255,0.5); stroke-width: 2; }
+.speedo__ticks .is-red { stroke: #ff3b1a; fill: #ff3b1a; }
+.speedo__ticks text { fill: rgba(255,255,255,0.6); font-family: var(--f-mono); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+.speedo__ticks text.is-red { fill: #ff5b1a; font-weight: 600; }
 .speedo__read { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .speedo__num { font-family: var(--f-display); font-weight: 900; font-size: clamp(46px, 4.4vw, 66px); line-height: 0.85; font-variant-numeric: tabular-nums; }
 .drive.is-redline .speedo__num { color: var(--fuel); }
@@ -316,7 +328,6 @@ html.is-entering body::after { content: ''; position: fixed; inset: 0; z-index: 
   .press__grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 900px) {
-  .drive__passing { top: auto; bottom: calc(var(--pad) + 200px); right: var(--pad); }
   .drive__np { top: 84px; }
   .drive__hud--tl { top: 84px; }
   .drive__title { transform: translateY(-80%); }
@@ -339,7 +350,8 @@ html.is-entering body::after { content: ''; position: fixed; inset: 0; z-index: 
   .crate__bar { top: 64px; }
 }
 @media (max-width: 560px) {
-  .drive__hint { display: none; }
+  .drive__tag-est { display: none; }
+  .drive__tag { letter-spacing: 0.14em; }
   .drive__np b { font-size: 18px; }
   .drive__passing-v b { font-size: 20px; }
   .vgrid { grid-template-columns: 1fr; }

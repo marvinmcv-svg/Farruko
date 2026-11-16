@@ -68,11 +68,20 @@ const CIRC = 2 * Math.PI * 84;
 const ARC = 0.75; // 270° dial
 fill.style.strokeDasharray = `${CIRC * ARC} ${CIRC}`;
 
-// Dial ticks every 20 km/h with labels.
-$('.speedo__ticks').innerHTML = Array.from({ length: 10 }, (_, i) => {
-  const a = (135 + (i / 9) * 270) * (Math.PI / 180);
-  const r1 = 72, r2 = i % 3 === 0 ? 62 : 66;
-  return `<line x1="${100 + Math.cos(a) * r1}" y1="${100 + Math.sin(a) * r1}" x2="${100 + Math.cos(a) * r2}" y2="${100 + Math.sin(a) * r2}" />`;
+// Redline zone (150–167) painted on the dial so the target is visible before you reach it.
+const RED_FROM = 150 / 167;
+$('.speedo__red').style.strokeDasharray = `0 ${CIRC * ARC * RED_FROM} ${CIRC * ARC * (1 - RED_FROM)} ${CIRC}`;
+
+// Dial ticks every 10 km/h, long + labelled every 40, ending on a 167 mark.
+const deg = (kmh) => (135 + (kmh / 167) * 270) * (Math.PI / 180);
+const pt = (a, r) => `${(100 + Math.cos(a) * r).toFixed(1)}`;
+const ptY = (a, r) => `${(100 + Math.sin(a) * r).toFixed(1)}`;
+$('.speedo__ticks').innerHTML = [...Array.from({ length: 17 }, (_, i) => i * 10), 167].map((k) => {
+  const a = deg(k);
+  const major = k % 40 === 0 || k === 167;
+  const r1 = 74, r2 = major ? 64 : 69;
+  const line = `<line class="${k >= 150 ? 'is-red' : ''}" x1="${pt(a, r1)}" y1="${ptY(a, r1)}" x2="${pt(a, r2)}" y2="${ptY(a, r2)}" />`;
+  return major ? line + `<text x="${pt(a, 98)}" y="${ptY(a, 98)}" class="${k === 167 ? 'is-red' : ''}">${k}</text>` : line;
 }).join('');
 
 const passK = $('.drive__passing-k');
@@ -114,7 +123,8 @@ drive.addEventListener('pointerdown', (e) => {
   setHold(true);
 });
 ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => drive.addEventListener(ev, () => setHold(false)));
-drive.addEventListener('pointermove', (e) => road?.setPointer(e));
+drive.addEventListener('pointerleave', () => road?.clearPointer());
+drive.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.pointerType === 'pen') road?.setPointer(e); });
 drive.addEventListener('click', (e) => {
   if (e.target.closest('a, button') || !road?.hovered) return;
   const a = document.createElement('a');
@@ -143,12 +153,14 @@ gsap.ticker.add(() => {
     fill.style.strokeDashoffset = String(CIRC * ARC * (1 - p));
   }
   drive.style.setProperty('--spd', p.toFixed(3));
-  const atRed = kmh >= 166;
+  const atRed = road.state.redline;
   if (atRed !== redlined) {
     redlined = atRed;
     drive.classList.toggle('is-redline', atRed);
     if (atRed && !reduced) {
       gsap.fromTo('.drive__redline span', { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'expo.out' });
+      gsap.fromTo('.speedo', { scale: 1.12 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+      navigator.vibrate?.(40);
     }
   }
 });
@@ -166,8 +178,8 @@ function intro() {
   const tl = gsap.timeline();
   tl.from('.drive__canvas', { opacity: 0, duration: 1.6, ease: 'power2.out' }, 0)
     .from('.drive__word', { yPercent: 60, opacity: 0, scaleY: 1.6, duration: 1.4, ease: 'expo.out' }, 0.1)
-    .from('.drive__tag, .drive__hud, .drive__passing', { opacity: 0, y: 14, duration: 0.8, stagger: 0.06, ease: 'power3.out' }, 0.5)
-    .from('.speedo, .drive__cta > *', { opacity: 0, y: 30, duration: 0.9, stagger: 0.08, ease: 'power3.out' }, 0.6)
+    .from('.drive__tag, .drive__hud', { opacity: 0, y: 14, duration: 0.8, stagger: 0.06, ease: 'power3.out' }, 0.5)
+    .from('.speedo, .drive__passing, .drive__cta > *', { opacity: 0, y: 30, duration: 0.9, stagger: 0.08, ease: 'power3.out' }, 0.6)
     .from('.nav', { opacity: 0, duration: 0.8 }, 0.6);
 }
 

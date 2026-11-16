@@ -47,27 +47,32 @@
       <h1 class="drive__title" aria-label="Farruko">
         <span class="drive__word" data-text="FARRUKO">FARRUKO</span>
       </h1>
-      <p class="drive__tag mono">El Talento del Bloque · Est. 2007 · Era Cvrbon Vrmor</p>
-
-      <div class="drive__passing mono" aria-live="polite">
-        <span class="drive__passing-k">Pasando</span>
-        <span class="drive__passing-v"><b>—</b><i></i></span>
-      </div>
+      <p class="drive__tag mono">El Talento del Bloque<span class="drive__tag-est"> · Est. 2007</span> · Era Cvrbon Vrmor</p>
 
       <div class="drive__bottom">
-        <div class="speedo" aria-hidden="true">
-          <svg viewBox="0 0 200 200" class="speedo__dial">
-            <circle class="speedo__track" cx="100" cy="100" r="84" />
-            <circle class="speedo__fill" cx="100" cy="100" r="84" />
-            <g class="speedo__ticks"></g>
-          </svg>
-          <div class="speedo__read">
-            <b class="speedo__num">084</b>
-            <span class="mono">KM/H</span>
+        <div class="cluster">
+          <div class="speedo" aria-hidden="true">
+            <svg viewBox="0 0 200 200" class="speedo__dial">
+              <circle class="speedo__track" cx="100" cy="100" r="84" />
+              <circle class="speedo__red" cx="100" cy="100" r="84" />
+              <circle class="speedo__fill" cx="100" cy="100" r="84" />
+              <g class="speedo__ticks"></g>
+            </svg>
+            <div class="speedo__read">
+              <b class="speedo__num">084</b>
+              <span class="mono">KM/H</span>
+            </div>
+          </div>
+          <div class="drive__passing mono">
+            <span class="drive__passing-k">Pasando</span>
+            <span class="drive__passing-v"><b>—</b></span>
           </div>
         </div>
         <div class="drive__cta">
-          <p class="drive__hint mono"><kbd>Mantén presionado</kbd> o <kbd>Espacio</kbd> para acelerar a 167</p>
+          <p class="drive__hint mono">
+            <span class="drive__hint--fine"><kbd>Mantén presionado</kbd> o <kbd>Espacio</kbd> para acelerar a 167</span>
+            <span class="drive__hint--touch"><kbd>Mantén el dedo</kbd> para acelerar a 167</span>
+          </p>
           <div class="drive__btns">
             <a class="btn btn--fuel magnetic" href="/musica.html" data-cursor="Go"><span>Explora</span><b>La música</b></a>
             <a class="btn btn--ghost magnetic" href="/media.html" data-cursor="Ver"><span>Videos</span></a>

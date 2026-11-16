@@ -109,10 +109,10 @@ const skyMaterial = (uniforms) => new THREE.ShaderMaterial({
 
 // Radial speed blur + chromatic split + vignette, all scaled by speed.
 const SpeedShader = {
-  uniforms: { tDiffuse: { value: null }, uSpeed: { value: 0 }, uTime: { value: 0 }, uFocus: { value: new THREE.Vector2(0.5, 0.45) } },
+  uniforms: { tDiffuse: { value: null }, uSpeed: { value: 0 }, uTime: { value: 0 }, uFlash: { value: 0 }, uFocus: { value: new THREE.Vector2(0.5, 0.45) } },
   vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
   fragmentShader: /* glsl */ `
-    uniform sampler2D tDiffuse; uniform float uSpeed; uniform float uTime; uniform vec2 uFocus;
+    uniform sampler2D tDiffuse; uniform float uSpeed; uniform float uTime; uniform float uFlash; uniform vec2 uFocus;
     varying vec2 vUv;
     float rnd(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233)) + uTime) * 43758.5453); }
     void main() {
@@ -132,6 +132,8 @@ const SpeedShader = {
       vec3 col = acc / float(N);
       float vig = smoothstep(1.05, 0.25, dist * (1.0 + s * 0.5));
       col *= mix(0.35, 1.0, vig);
+      // Redline hit: a hot white-orange punch that blooms out from the vanishing point.
+      col += vec3(1.0, 0.55, 0.25) * uFlash * (0.55 - dist * 0.4);
       col += (rnd(vUv * 500.0) - 0.5) * 0.018;
       gl_FragColor = vec4(col, 1.0);
     }`,
@@ -219,13 +221,18 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
   const heads = new THREE.InstancedMesh(headGeo, new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 1.3, 0.45), toneMapped: false }), LAMP_N * 2);
   const halos = new THREE.InstancedMesh(new THREE.PlaneGeometry(2.2, 2.2), new THREE.MeshBasicMaterial({ map: glow, color: new THREE.Color(0.9, 0.42, 0.16), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }), LAMP_N * 2);
   const pools = new THREE.InstancedMesh(new THREE.PlaneGeometry(8, 8), new THREE.MeshBasicMaterial({ map: glow, color: new THREE.Color(0.32, 0.12, 0.04), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }), LAMP_N * 2);
-  scene.add(poles, arms, heads, halos, pools);
+  // Wet-asphalt reflections: long streaks smeared toward the camera under each lamp.
+  const reflGeo = new THREE.PlaneGeometry(1.6, 18); reflGeo.rotateX(-Math.PI / 2);
+  const refls = new THREE.InstancedMesh(reflGeo, new THREE.MeshBasicMaterial({ map: glow, color: new THREE.Color(0.55, 0.22, 0.07), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }), LAMP_N * 2);
+  scene.add(poles, arms, heads, halos, pools, refls);
 
   /* -------- traffic light trails */
   const CARS = small ? 26 : 44;
   const trailGeo = new THREE.BoxGeometry(0.06, 0.06, 1); trailGeo.translate(0, 0, -0.5);
   const trails = new THREE.InstancedMesh(trailGeo, new THREE.MeshBasicMaterial({ toneMapped: false, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }), CARS * 2);
-  scene.add(trails);
+  const trailReflGeo = new THREE.PlaneGeometry(0.7, 1); trailReflGeo.rotateX(-Math.PI / 2); trailReflGeo.translate(0, 0, -0.5);
+  const trailRefl = new THREE.InstancedMesh(trailReflGeo, new THREE.MeshBasicMaterial({ map: glow, transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }), CARS * 2);
+  scene.add(trails, trailRefl);
   const cars = Array.from({ length: CARS }, (_, i) => {
     const oncoming = i % 5 < 3;
     const lane = oncoming ? (Math.random() < 0.5 ? -1.75 : -5.25) : (Math.random() < 0.7 ? 5.25 : 1.75);
@@ -236,7 +243,7 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
       color: oncoming ? new THREE.Color(1.7, 1.6, 1.45) : (Math.random() < 0.75 ? new THREE.Color(2.6, 0.12, 0.04) : new THREE.Color(2.6, 0.9, 0.12)),
     };
   });
-  cars.forEach((c, i) => { trails.setColorAt(i * 2, c.color); trails.setColorAt(i * 2 + 1, c.color); });
+  cars.forEach((c, i) => { for (const m of [trails, trailRefl]) { m.setColorAt(i * 2, c.color); m.setColorAt(i * 2 + 1, c.color); } });
 
   /* -------- speed streaks (dust / drizzle) */
   const STREAKS = small ? 120 : 240;
@@ -276,7 +283,7 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
     const spill = new THREE.Mesh(new THREE.PlaneGeometry(7.5, 7.5), new THREE.MeshBasicMaterial({ map: glow, color: new THREE.Color(0.3, 0.1, 0.03), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
     spill.position.z = -0.3;
     g.add(spill, frame, back, panel, legL, legR);
-    g.position.set(side * (ROAD_HALF + 5.2), 7.1, 12 - mod(i * BB_S, BB_L));
+    g.position.set(side * (ROAD_HALF + 4.6), 5.9, 12 - mod(i * BB_S, BB_L));
     g.rotation.y = -side * 0.42;
     scene.add(g);
     const b = { g, mat, panel, side, index: i, album: null };
@@ -316,7 +323,7 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
   /* -------- state + input */
   const state = {
     speed: reduced ? 0 : 0.5, target: 0.5, offset: 0, scroll: 0,
-    mx: 0, my: 0, smx: 0, smy: 0, hold: false, running: true, visible: true,
+    mx: 0, my: 0, smx: 0, smy: 0, hold: false, inView: true, flash: 0, redline: false,
   };
   const CRUISE = 0.5;
 
@@ -344,6 +351,7 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
     state.my = ((e.clientY - r.top) / r.height) * 2 - 1;
     ndc.set(state.mx, -state.my);
   }
+  function clearPointer() { ndc.set(9, 9); }
 
   /* -------- update loop */
   let last = performance.now();
@@ -352,7 +360,7 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    if (!state.visible) { last = now; return; }
+    if (!state.inView || document.hidden) { last = now; return; }
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     step(dt, now / 1000);
@@ -361,10 +369,17 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
 
   function step(dt, t) {
     // Speed: ease toward the target; accelerating is slower than braking feels.
-    const target = reduced ? 0 : (state.hold ? 1 : CRUISE) + state.scroll * 0.35;
-    const rate = target > state.speed ? 0.9 : 1.8;
-    state.speed += (Math.min(target, 1) - state.speed) * Math.min(1, dt * rate);
+    // Accelerate at a near-constant rate that tapers slightly in the top "gears", so holding
+    // actually arrives at 167 (~2s from cruise) instead of creeping toward it forever.
+    // Braking is an exponential ease, which feels like lifting off the throttle.
+    const target = reduced ? 0 : Math.min(1, (state.hold ? 1 : CRUISE) + state.scroll * 0.35);
+    if (target > state.speed) state.speed = Math.min(target, state.speed + dt * 0.3 * (1.2 - state.speed * 0.4));
+    else state.speed += (target - state.speed) * Math.min(1, dt * 1.8);
     const sp = state.speed;
+    const atRed = sp >= 0.995;
+    if (atRed && !state.redline) state.flash = 1;
+    state.redline = atRed;
+    state.flash = Math.max(0, state.flash - dt * 2.2);
     const units = sp * 95; // world units per second
     state.offset += units * dt;
 
@@ -374,11 +389,13 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
     skyU.uTime.value = t;
     speedPass.uniforms.uSpeed.value = Math.max(0, (sp - 0.35) / 0.65);
     speedPass.uniforms.uTime.value = t % 10;
+    speedPass.uniforms.uFlash.value = state.flash * state.flash;
+    bloom.strength = 0.7 + state.flash * 0.9 + Math.max(0, sp - 0.8) * 0.5;
 
     // Camera: steer with the pointer, shake a little when flat out.
     state.smx += (state.mx - state.smx) * Math.min(1, dt * 2.5);
     state.smy += (state.my - state.smy) * Math.min(1, dt * 2.5);
-    const shake = Math.max(0, sp - 0.7) * 0.05;
+    const shake = Math.max(0, sp - 0.7) * 0.05 + state.flash * 0.12;
     camera.position.x = CAM_X + state.smx * 1.4 + Math.sin(t * 37) * shake;
     camera.position.y = 1.35 - state.smy * 0.35 + state.scroll * 5 + Math.sin(t * 41) * shake * 0.6;
     camera.fov = camera.userData.baseFov + sp * sp * 26;
@@ -401,9 +418,11 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
         halos.setMatrixAt(k, dummy.matrix);
         dummy.position.set(x - side * 3.2, 0.02, z); dummy.rotation.set(-Math.PI / 2, 0, 0); dummy.updateMatrix();
         pools.setMatrixAt(k, dummy.matrix);
+        dummy.position.set(x - side * 2.6, 0.03, z + 7); dummy.rotation.set(0, 0, 0); dummy.updateMatrix();
+        refls.setMatrixAt(k, dummy.matrix);
       }
     }
-    [poles, arms, heads, halos, pools].forEach((m) => { m.instanceMatrix.needsUpdate = true; });
+    [poles, arms, heads, halos, pools, refls].forEach((m) => { m.instanceMatrix.needsUpdate = true; });
 
     // Traffic — relative motion; trail length grows with closing speed.
     for (let i = 0; i < CARS; i++) {
@@ -419,9 +438,14 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
         dummy.scale.set(1, 1, len);
         dummy.updateMatrix();
         trails.setMatrixAt(i * 2 + s, dummy.matrix);
+        dummy.position.set(c.lane + (s ? 0.75 : -0.75), 0.02, c.z + 1.2);
+        dummy.scale.set(1, 1, len * 1.5 + 2.5);
+        dummy.updateMatrix();
+        trailRefl.setMatrixAt(i * 2 + s, dummy.matrix);
       }
     }
     trails.instanceMatrix.needsUpdate = true;
+    trailRefl.instanceMatrix.needsUpdate = true;
 
     // Streaks
     const sl = 0.2 + sp * sp * 9;
@@ -442,14 +466,14 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
       const z = 12 - mod(b.index * BB_S - state.offset, BB_L);
       if (z < prevZ - 50) assign(b); // wrapped to the back
       b.g.position.z = z;
-      if (z < -8 && z > -90 && z > nearestZ) { nearestZ = z; nearest = b; }
+      if (z < -4 && z > -55 && z > nearestZ) { nearestZ = z; nearest = b; }
     }
     if (nearest && nearest.album !== lastPassed) { lastPassed = nearest.album; onPass?.(nearest.album, nearest.side); }
 
     gantry.position.z = 12 - mod(140 - state.offset, GANTRY_L);
 
     // Hover a billboard → cursor + click opens that record.
-    if (!reduced && onHover) {
+    if (!reduced && onHover && ndc.x !== 9) {
       raycaster.setFromCamera(ndc, camera);
       const hit = raycaster.intersectObjects(boards.map((b) => b.panel), false)[0];
       const b = hit ? boards.find((x) => x.panel === hit.object) : null;
@@ -462,17 +486,19 @@ export function initRoad(canvas, { albums, reduced = false, onPass, onHover } = 
   if (reduced) { step(0.016, 0); composer.render(); }
   else raf = requestAnimationFrame(frame);
 
-  const io = new IntersectionObserver(([e]) => { state.visible = e.isIntersecting && !document.hidden; }, { threshold: 0 });
+  // Pause when scrolled away or the tab is hidden (checked together each frame, so returning
+  // to the tab while scrolled past the hero doesn't wake the renderer).
+  const io = new IntersectionObserver(([e]) => { state.inView = e.isIntersecting; }, { threshold: 0 });
   io.observe(canvas);
-  document.addEventListener('visibilitychange', () => { state.visible = !document.hidden; });
 
   return {
     state,
     setPointer,
+    clearPointer,
     setHold(v) { state.hold = v && !reduced; },
     setScroll(p) { state.scroll = p; if (reduced) { step(0.016, 0); composer.render(); } },
     get kmh() { return Math.round(state.speed * 167); },
     get hovered() { return hovered; },
-    dispose() { cancelAnimationFrame(raf); io.disconnect(); renderer.dispose(); },
+    dispose() { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', resize); renderer.dispose(); },
   };
 }
